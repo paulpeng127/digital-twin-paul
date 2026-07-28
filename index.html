@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>彭浩</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #2ea59e;
+    --indigo: #5b5fe3;
+    --gradient: linear-gradient(135deg, var(--teal), var(--indigo));
+    --bg: #fbfbfa;
+    --surface: rgba(255,255,255,0.72);
+    --text: #1d1d1f;
+    --text-body: #3a3c42;
+    --text-secondary: #86868b;
+    --border: rgba(0,0,0,0.06);
+    --radius: 16px;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(46,165,158,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(91,95,227,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(46,165,158,0.02) 0%, transparent 70%);
+  }
+
+  /* ── Container ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 72px 40px 100px; }
+
+  /* ══════════════════════════════════════
+     HERO — 首屏核心区
+     ══════════════════════════════════════ */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 64px;
+    min-height: 320px;
+  }
+  .avatar-wrap {
+    flex-shrink: 0;
+    position: relative;
+  }
+  .avatar {
+    width: 104px; height: 104px;
+    border-radius: 50%;
+    background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; color: #fff; font-weight: 600;
+    letter-spacing: 0.06em;
+    position: relative;
+    z-index: 1;
+  }
+  .avatar-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    background: var(--gradient);
+    opacity: 0.16;
+    filter: blur(7px);
+    z-index: 0;
+  }
+
+  .hero-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .hero-body h1 {
+    font-size: 3.4rem;
+    font-weight: 730;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 20px;
+  }
+  .hero-body h1 .gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Tagline — 主次分明：主句重，补句轻 */
+  .hero-body .tagline-main {
+    font-size: 1.25rem;
+    font-weight: 520;
+    color: var(--text);
+    line-height: 1.55;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .hero-body .tagline-sub {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 28px;
+    max-width: 480px;
+  }
+
+  /* CTA — 连接 Hero 和聊天的桥梁 */
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 26px;
+    border: none;
+    background: var(--gradient);
+    color: #fff;
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 0.02em;
+    font-family: inherit;
+    box-shadow: 0 2px 12px rgba(91,95,227,0.22);
+    text-decoration: none;
+  }
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(91,95,227,0.32);
+  }
+  .hero-cta .arrow {
+    display: inline-block;
+    transition: transform 0.3s;
+    font-size: 1.1rem;
+  }
+  .hero-cta:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.07), transparent);
+    margin: 0 0 48px 0;
+    border: none;
+  }
+
+  /* ── Stats — 压缩视觉权重，不抢 Hero ── */
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 56px;
+  }
+  .stat {
+    flex: 1;
+  }
+  .stat-value {
+    font-size: 1.4rem; font-weight: 680;
+    color: var(--text);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    margin-bottom: 3px;
+  }
+  .stat-label {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+  }
+
+  /* ══════════════════════════════════════
+     CONTENT ROW
+     ══════════════════════════════════════ */
+  .content-row {
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .main-col {
+    flex: 1;
+    min-width: 0;
+  }
+  .chat-col {
+    width: 400px;
+    flex-shrink: 0;
+  }
+
+  /* ── Sections ── */
+  .section {
+    margin-bottom: 48px;
+  }
+  .section-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.05);
+    min-width: 20px;
+  }
+  .section p {
+    font-size: 1rem; color: var(--text-body);
+    line-height: 1.9;
+  }
+  .section p .lead {
+    font-weight: 530;
+    color: var(--text);
+  }
+
+  /* ── Interest tags ── */
+  .interest-row {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .interest-item {
+    font-size: 0.85rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid transparent;
+    color: #fff;
+    cursor: default;
+    transition: all 0.3s;
+    font-weight: 500;
+  }
+  .interest-item:nth-child(1) { background: #f8a5a5; border-color: #f8a5a5; }
+  .interest-item:nth-child(2) { background: #74b9ff; border-color: #74b9ff; }
+  .interest-item:nth-child(3) { background: #fcc06a; border-color: #fcc06a; }
+  .interest-item:nth-child(4) { background: #5ee2c2; border-color: #5ee2c2; }
+  .interest-item:nth-child(5) { background: #a9a0f5; border-color: #a9a0f5; }
+  .interest-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  /* ── Chat: glass card ── */
+  .chat-wrapper {
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: sticky;
+    top: 24px;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.02),
+      0 8px 32px rgba(0,0,0,0.04);
+  }
+  .chat-header {
+    padding: 16px 24px;
+    font-size: 0.82rem; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    color: var(--text);
+    letter-spacing: 0.03em;
+    background: rgba(255,255,255,0.5);
+  }
+  .chat-header .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--indigo);
+    box-shadow: 0 0 8px rgba(91,95,227,0.35);
+    animation: dotGlow 3s ease-in-out infinite;
+  }
+  @keyframes dotGlow {
+    0%, 100% { box-shadow: 0 0 6px rgba(91,95,227,0.3); }
+    50% { box-shadow: 0 0 14px rgba(91,95,227,0.55); }
+  }
+
+  .chat-messages {
+    padding: 24px;
+    min-height: 440px;
+    max-height: 500px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .msg {
+    max-width: 82%;
+    padding: 11px 17px;
+    border-radius: 16px;
+    font-size: 0.85rem; line-height: 1.7;
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--gradient);
+    color: #fff;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 2px 8px rgba(91,95,227,0.18);
+  }
+  .msg.bot {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--text);
+    border-bottom-left-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .msg .time {
+    display: block;
+    font-size: 0.66rem;
+    margin-top: 6px;
+    opacity: 0.4;
+    letter-spacing: 0.04em;
+  }
+
+  .typing-indicator {
+    display: flex; gap: 4px; padding: 11px 17px;
+  }
+  .typing-indicator span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    opacity: 0.35;
+    animation: bounce 1.4s ease-in-out infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+
+  .quick-qs {
+    display: flex; flex-wrap: wrap; gap: 7px;
+    padding: 0 24px 18px;
+  }
+  .quick-q {
+    font-size: 0.75rem;
+    padding: 6px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.07);
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.25s;
+    font-family: inherit;
+  }
+  .quick-q:hover {
+    border-color: rgba(91,95,227,0.25);
+    color: var(--indigo);
+    background: rgba(255,255,255,0.8);
+  }
+
+  .chat-input-row {
+    display: flex; gap: 10px;
+    padding: 14px 24px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.4);
+  }
+  .chat-input-row input {
+    flex: 1;
+    padding: 10px 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 22px;
+    font-size: 0.85rem;
+    outline: none; font-family: inherit;
+    background: #fff;
+    transition: all 0.25s;
+    position: relative;
+    z-index: 1;
+  }
+  .chat-input-row input:focus {
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(91,95,227,0.08);
+    background: #fff;
+  }
+  .chat-input-row button {
+    padding: 10px 24px;
+    border-radius: 22px;
+    border: none;
+    background: var(--gradient);
+    color: #fff;
+    font-size: 0.85rem; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(91,95,227,0.2);
+  }
+  .chat-input-row button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(91,95,227,0.3);
+  }
+  .chat-input-row button:active { transform: translateY(0); }
+  .chat-input-row button:disabled {
+    background: #d4d4d8;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    padding: 56px 0 0;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 860px) {
+    .container { padding: 44px 24px 64px; }
+    .hero { flex-direction: column; gap: 28px; min-height: auto; margin-bottom: 48px; align-items: flex-start; }
+    .hero-body h1 { font-size: 2.4rem; }
+    .hero-body .tagline-main { font-size: 1.1rem; }
+    .hero-body .tagline-sub { font-size: 0.9rem; max-width: 100%; }
+    .stats-row { gap: 24px; }
+    .stat-value { font-size: 1.2rem; }
+    .divider { margin-bottom: 36px; }
+    .content-row { flex-direction: column; gap: 40px; }
+    .chat-col { width: 100%; }
+    .chat-wrapper { position: static; }
+    .chat-messages { min-height: 340px; max-height: 400px; }
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 32px 16px 48px; }
+    .hero { gap: 20px; }
+    .avatar { width: 80px; height: 80px; font-size: 30px; }
+    .hero-body h1 { font-size: 2rem; }
+    .hero-body .tagline-main { font-size: 1rem; }
+    .hero-body .tagline-sub { font-size: 0.85rem; }
+    .hero-cta { padding: 10px 22px; font-size: 0.88rem; }
+    .stats-row { flex-direction: column; gap: 16px; }
+    .section { margin-bottom: 32px; }
+    .section p { font-size: 0.92rem; }
+    .chat-messages { padding: 18px; min-height: 300px; }
+    .msg { max-width: 88%; }
+    .chat-input-row { padding: 12px 18px; }
+    .quick-qs { padding: 0 18px 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ═══ Hero — 首屏核心 ═══ -->
+  <header class="hero">
+    <div class="avatar-wrap">
+      <div class="avatar-ring"></div>
+      <div class="avatar" id="avatarEl">彭</div>
+    </div>
+    <div class="hero-body">
+      <h1><span class="gradient-text">彭浩</span></h1>
+      <p class="tagline-main">电子信息出身，正在 Gap 中探索 AI 和内容创作。</p>
+      <p class="tagline-sub">白天实习、晚上学 AI 工具链，也在搭这个主页——算是给自己的数字根据地。</p>
+      <a href="#chat" class="hero-cta">
+        和我的数字分身聊聊
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- Stats — 降低视觉权重 -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-value">2025</div>
+      <div class="stat-label">毕业</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">Gap</div>
+      <div class="stat-label">状态</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">AI</div>
+      <div class="stat-label">方向</div>
+    </div>
+  </div>
+
+  <!-- Content Row -->
+  <div class="content-row">
+
+    <!-- 左/中列 -->
+    <div class="main-col">
+
+      <div class="section">
+        <div class="section-label">现在</div>
+        <p>
+          <span class="lead">在北京拓疆者智能技术有限公司做嵌入式系统开发实习生。</span><br>
+          负责传感器调试、ROS 驱动优化和硬件问题排查。同时自学 AI 工具链（Claude、Cursor、agent 框架），探索 AI 应用方向。
+        </p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">背景</div>
+        <p>
+          <span class="lead">四川大学电子信息工程本科，目前在 Gap 中，拿了 CUHK、NUS、NTU offer。</span>
+        </p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">项目</div>
+        <p>
+          <span class="lead">PIM 架构仿真平台 · 独立设计</span><br>
+          设计面向深度学习的存内计算自定义 ISA，基于 ARMv7 扩展指令集；编写指令解析与微操作建模，仿真平台性能较传统 CPU 最高加速 4.2 倍。
+        </p>
+        <p style="margin-top:20px;">
+          <span class="lead">ARM 汇编人机交互与电机驱动</span><br>
+          编写 ARMv7 汇编程序实现 4×4 键盘扫描、串口通信与 GPIO 控制；手动编写"雨刷模式"电机驱动算法，响应延迟控制在 0.8ms 内，交互准确率 100%。
+        </p>
+        <p style="margin-top:20px;">
+          <span class="lead">静电式超材料光学开关 · 第一作者论文撰写中</span><br>
+          构建可调超材料单元，通过偏振角和结构参数调节实现逻辑开关与传感功能；负责实验数据可复现性校验。
+        </p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">奖项</div>
+        <p>
+          <span class="lead">中国国际"互联网+"大学生创新创业大赛省级银奖</span><br>
+          连续两年获校级单项奖学金。碳净零项目获国家烟气脱硫工程技术研究中心认可，推动发布两项行业标准。
+        </p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">爱好</div>
+        <div class="interest-row">
+          <span class="interest-item">健身</span>
+          <span class="interest-item">滑雪</span>
+          <span class="interest-item">篮球</span>
+          <span class="interest-item">阅读</span>
+          <span class="interest-item">摄影</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 右列：数字分身 -->
+    <div class="chat-col" id="chat">
+      <div class="chat-wrapper">
+        <div class="chat-header">
+          <span class="dot"></span>
+          数字分身 · 在线
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg bot">
+            嘿，我是彭浩的数字分身。<br>
+            想了解他在做什么、怎么联系、或者随便聊聊？直接问我。
+            <span class="time">刚刚</span>
+          </div>
+        </div>
+
+        <div class="quick-qs" id="quickQs">
+          <button class="quick-q">你现在在做什么？</button>
+          <button class="quick-q">你的背景是什么？</button>
+          <button class="quick-q">怎么联系你？</button>
+          <button class="quick-q">你有哪些作品？</button>
+        </div>
+
+        <div class="chat-input-row">
+          <input
+            type="text"
+            id="chatInput"
+            placeholder="输入你的问题…"
+            maxlength="200"
+            autocomplete="off"
+          >
+          <button id="sendBtn" disabled>发送</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>© 2026 彭浩 · 1274422701@qq.com</p>
+  </div>
+
+</div>
+
+<script>
+  const kb = {
+    "你现在在做什么": "我现在正在北京拓疆者智能技术有限公司实习，做嵌入式系统开发——调试传感器、写 ROS 驱动、排查硬件问题。业余在学 AI 工具链（Claude、Cursor、agent 框架），也在搭这个个人主页。接下来计划申请 AI 或信息科学方向的硕士。",
+    "你有哪些作品": "我做了几个比较有意思的项目：一个是 PIM 存内计算架构仿真平台（性能比传统 CPU 快 4.2 倍），一个是用 ARM 汇编写的电机驱动和人机交互系统（响应延迟 0.8ms），还有一篇静电式超材料光学开关的第一作者论文正在写。你可以在这个主页的「项目」区域看到详细介绍。",
+    "怎么联系你": "可以通过邮箱联系我：1274422701@qq.com。如果你是潜在合作伙伴或面试官，也欢迎直接约一个线上聊。",
+    "你的背景是什么": "我本科在四川大学读电子信息工程。软硬件都有扎实基础——电子电路设计 98 分，微电子电路设计 96 分。毕业后选择 Gap，通过实习了解产业，同时探索 AI 和嵌入式交叉方向。",
+    "default": "这是个好问题！不过我的知识库还在完善中，暂时没有特别好的答案。你可以试试问其他问题，或者直接通过邮箱 1274422701@qq.com 找到真正的彭浩 😄"
+  };
+
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  function answer(question) {
+    const q = question.trim();
+    for (const [key, reply] of Object.entries(kb)) {
+      if (key === 'default') continue;
+      if (q.includes(key)) return reply;
+    }
+    return kb['default'];
+  }
+
+  function addMessage(text, role) {
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    div.innerHTML = text.replace(/\n/g, '<br>') + '<span class="time">刚刚</span>';
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'msg bot typing-indicator';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(el);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return el;
+  }
+
+  async function doSend(text) {
+    if (!text.trim()) return;
+    addMessage(text, 'user');
+    chatInput.value = '';
+    sendBtn.disabled = true;
+    chatInput.focus();
+
+    const typing = showTyping();
+    await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+    typing.remove();
+
+    const reply = answer(text);
+    addMessage(reply, 'bot');
+  }
+
+  chatInput.addEventListener('input', () => {
+    sendBtn.disabled = !chatInput.value.trim();
+  });
+
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && chatInput.value.trim()) {
+      doSend(chatInput.value);
+    }
+  });
+
+  sendBtn.addEventListener('click', () => {
+    if (chatInput.value.trim()) doSend(chatInput.value);
+  });
+
+  document.getElementById('quickQs').addEventListener('click', (e) => {
+    if (e.target.classList.contains('quick-q')) {
+      doSend(e.target.textContent);
+    }
+  });
+
+  /* ── Hero CTA scrolls to chat ── */
+  document.querySelector('.hero-cta').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('chat').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  window.setAvatar = function(src) {
+    const el = document.getElementById('avatarEl');
+    if (el) {
+      el.innerHTML = '';
+      el.style.background = 'none';
+      const img = document.createElement('img');
+      img.src = src;
+      img.style.width = '100%'; img.style.height = '100%';
+      img.style.borderRadius = '50%'; img.style.objectFit = 'cover';
+      el.appendChild(img);
+    }
+  };
+
+  chatInput.focus();
+</script>
+
+</body>
+</html>
